@@ -83,66 +83,175 @@ public class AccesoBaseDatos
     }
 
     // Método para insertar datos
-    public void insertarDatos(){
-        System.out.println("-- Inserción de Datos");
-
-        System.out.print("Título de la Obra: ");
+    public void insertarDatos()
+    {
+        System.out.println("--- Inserccion de datos ---");
+        System.out.println("Titulo de la obra: ");
         titulo1 = sc1.nextLine();
-
-        System.out.print("autor de la Obra: ");
+        System.out.println("Autor de la obra: ");
         autor1 = sc1.nextLine();
-
-        System.out.print("Fecha de la Obra: ");
+        System.out.println("Fecha de publicacion de la obra: ");
         fecha1 = sc1.nextLine();
-
-        System.out.print("Páginas de la Obra: ");
+        System.out.println("Paginas de la obra: ");
         paginas1 = sc1.nextLine();
-
-        System.out.print("Precio de la Obra: ");
+        System.out.println("Precio de la obra: ");
         pvp1 = sc1.nextLine();
 
         try
         {
+            // Llamada al método para conectar con la base de datos
             conetarBD();
+            // Configuración de la instrucción con parámetros (más segura)
             sql1 = "insert into obr (tit_obr, aut_obr, fec_obr, pag_obr, pvp_obr) values (?,?,?,?,?)";
             pstmt1 = con1.prepareStatement(sql1);
-            // Definición de parámetros
-            pstmt1.setString(1,titulo1);
-            pstmt1.setString(2,autor1);
-            pstmt1.setString(3,fecha1);
-            pstmt1.setInt(4,Integer.parseInt(paginas1));
-            pstmt1.setFloat(5,Float.parseFloat(pvp1));
+            // Definición de los parámetros
+            pstmt1.setString(1, titulo1);
+            pstmt1.setString(2, autor1);
+            pstmt1.setString(3, fecha1);
+            pstmt1.setInt(4, Integer.parseInt(paginas1));
+            pstmt1.setFloat(5, Float.parseFloat(pvp1));
 
             try
             {
-                // Ejecución
+                // Ejecucionde la instrucción con parámetros
                 pstmt1.execute();
-
-                // Confirmar los datos como permanentes
-                //con1.commit();
-                System.out.println("Artículo registrado correctamente");
-            } catch (SQLException e) {
+                // Confirmar los dato como permanentes (opcional)
+                // con1.commit();
+                System.out.println("Articulo registrado correctamente");
+            }
+            catch(SQLException e)
+            {
                 System.out.println("El articulo no se ha podido registrar");
             }
 
-            // Cierre de rs1, stmt1 y con1
+            // Cierre del pstmt1 y con1
             pstmt1.close();
-            rs1.close();
-            stmt1.close();
             con1.close();
-            // Vaciado de stmt1
+            // Vaciado del pstmt1
             pstmt1 = null;
-            stmt1 = null;
-
-        } catch (SQLException e) {
-            //e.printStackTrace(System.out);
-            System.out.println("SQLException" + e.getMessage());
-            System.out.println("SQLEstado" + e.getSQLState());
-            System.out.println("SQLCodigoError" + e.getErrorCode());
+            // Cierre del scanner
+            sc1.close();
         }
+        catch(SQLException e)
+        {
+            // e.printStackTrace(System.out);
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLEstado: " + e.getSQLState());
+            System.out.println("SQLCodigoError: " + e.getErrorCode());
+        }
+    }
+    public void modificarDatos()
+    {
+        System.out.println("--- Modificando datos ---");
 
+        System.out.println("Indicar el ID de la Obra ");
+        String idObrero = sc1.nextLine();
 
+        System.out.println("Titulo de la obra: ");
+        titulo1 = sc1.nextLine();
+        System.out.println("Autor de la obra: ");
+        autor1 = sc1.nextLine();
+        System.out.println("Fecha de publicacion de la obra: ");
+        fecha1 = sc1.nextLine();
+        System.out.println("Paginas de la obra: ");
+        paginas1 = sc1.nextLine();
+        System.out.println("Precio de la obra: ");
+        pvp1 = sc1.nextLine();
 
+        try
+        {
+            // Llamada al método para conectar con la base de datos
+            conetarBD();
+            // Configuración de la instrucción con parámetros (más segura)
+            //sql1 = "update into obr (tit_obr, aut_obr, fec_obr, pag_obr, pvp_obr) values (?,?,?,?,?)";
+            String sql1 = "UPDATE obr SET tit_obr = ?, aut_obr = ?, fec_obr = ?, pag_obr = ?, pvp_obr = ? WHERE ide_obr = ?";
+
+            pstmt1 = con1.prepareStatement(sql1);
+            // Definición de los parámetros
+            pstmt1.setString(1, titulo1);
+            pstmt1.setString(2, autor1);
+            pstmt1.setString(3, fecha1);
+            pstmt1.setInt(4, Integer.parseInt(paginas1));
+            pstmt1.setFloat(5, Float.parseFloat(pvp1));
+            pstmt1.setInt(6, Integer.parseInt(idObrero));
+
+            try
+            {
+                // Ejecucionde la instrucción con parámetros
+                pstmt1.execute();
+                // Confirmar los dato como permanentes (opcional)
+                // con1.commit();
+                System.out.println("Articulo actualizado correctamente");
+            }
+            catch(SQLException e)
+            {
+                System.out.println("El articulo no se ha podido modificar");
+            }
+
+            // Cierre del pstmt1 y con1
+            pstmt1.close();
+            con1.close();
+            // Vaciado del pstmt1
+            pstmt1 = null;
+            // Cierre del scanner
+            sc1.close();
+        }
+        catch(SQLException e)
+        {
+            // e.printStackTrace(System.out);
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLEstado: " + e.getSQLState());
+            System.out.println("SQLCodigoError: " + e.getErrorCode());
+        }
+    }
+
+    public void eliminarDatos()
+    {
+        System.out.println("--- Eliminar datos ---");
+
+        System.out.println("Indicar el ID de la Obra ");
+        String idObrero = sc1.nextLine();
+
+        try
+        {
+            // Llamada al método para conectar con la base de datos
+            conetarBD();
+            // Configuración de la instrucción con parámetros (más segura)
+            //sql1 = "update into obr (tit_obr, aut_obr, fec_obr, pag_obr, pvp_obr) values (?,?,?,?,?)";
+            String sql1 = "DELETE FROM obr  WHERE ide_obr = ?";
+
+            pstmt1 = con1.prepareStatement(sql1);
+            // Definición de los parámetros
+            pstmt1.setInt(1, Integer.parseInt(idObrero));
+
+            try
+            {
+                // Ejecucionde la instrucción con parámetros
+                pstmt1.execute();
+                // Confirmar los dato como permanentes (opcional)
+                // con1.commit();
+                System.out.println("Articulo eliminado correctamente");
+            }
+            catch(SQLException e)
+            {
+                System.out.println("El articulo no se ha podido eliminar");
+            }
+
+            // Cierre del pstmt1 y con1
+            pstmt1.close();
+            con1.close();
+            // Vaciado del pstmt1
+            pstmt1 = null;
+            // Cierre del scanner
+            sc1.close();
+        }
+        catch(SQLException e)
+        {
+            // e.printStackTrace(System.out);
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLEstado: " + e.getSQLState());
+            System.out.println("SQLCodigoError: " + e.getErrorCode());
+        }
     }
 
 }
